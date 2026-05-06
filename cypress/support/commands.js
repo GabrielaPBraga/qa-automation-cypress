@@ -15,11 +15,14 @@
 //
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
 // Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
 //
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('login', (usuario, senha) => {
+  cy.visit('https://www.saucedemo.com/')
+  cy.get('#user-name').type(usuario)
+  cy.get('#password').type(senha)
+  cy.get('#login-button').click()
+})

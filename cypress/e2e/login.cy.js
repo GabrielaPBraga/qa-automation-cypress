@@ -1,12 +1,31 @@
-describe('Login de usuário', () => {
-  it('Deve realizar login com credenciais válidas e acessar a página de produtos', () => {
-    cy.visit('https://www.saucedemo.com/')
+import loginPage from '../pages/loginPage'
 
-    cy.get('#user-name').type('standard_user')
-    cy.get('#password').type('secret_sauce')
-    cy.get('#login-button').click()
+describe('Login', () => {
 
-    cy.url().should('include', 'inventory.html')
-    cy.contains('Products').should('be.visible')
+  it('Deve fazer login com usuário válido', () => {
+    cy.fixture('user').then((user) => {
+
+      loginPage.acessar()
+      loginPage.preencherUsuario(user.standardUser.username)
+      loginPage.preencherSenha(user.standardUser.password)
+      loginPage.clicarLogin()
+
+      cy.url().should('include', 'inventory.html')
+
+    })
   })
+
+  it('Login com usuário bloqueado', () => {
+    cy.fixture('user').then((user) => {
+
+      loginPage.acessar()
+      loginPage.preencherUsuario(user.lockedUser.username)
+      loginPage.preencherSenha(user.lockedUser.password)
+      loginPage.clicarLogin()
+
+      loginPage.validarErro('Sorry, this user has been locked out')
+
+    })
+  })
+
 })
